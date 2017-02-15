@@ -1,0 +1,9 @@
+
+ float32 pan_min_angle
+ float32 pan_max_angle
+ float32 tilt_min_angle
+ float32 tilt_max_angle
+ float64[] forbidden_pan_min
+ float64[] forbidden_pan_max
+ float64[] forbidden_tilt_min
+ float64[] forbidden_tilt_max

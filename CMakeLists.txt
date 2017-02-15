@@ -1,62 +1,79 @@
 cmake_minimum_required(VERSION 2.4.6)
-project(asr_flir_ptu_controller)
+project(asr_flir_ptu_driver)
+# wird zum debuggen gebraucht
+#set(ROS_BUILD_TYPE Debug)
+#set(CMAKE_BUILD_TYPE Debug)
+#set(wxWidgets_CONFIGURATION mswu)
+
+#Required for ptu-cpi to build. doesnt work
+#set($ENV{_LINUX} 1)
 
 find_package(catkin REQUIRED COMPONENTS
-    roscpp
-    sensor_msgs
-    genmsg
-    actionlib_msgs
-    actionlib
+  roscpp
+  std_srvs
+  tf
+  sensor_msgs
+  std_msgs
+  genmsg
+  message_generation)
+    
+find_package(Boost REQUIRED COMPONENTS system)
+
+find_package(wxWidgets REQUIRED)
+
+add_message_files(
+DIRECTORY
+msg
+FILES
+State.msg
 )
 
-find_package(Boost REQUIRED COMPONENTS
-  system
-  thread
-)
-add_action_files(DIRECTORY action FILES PTUMovement.action)
-generate_messages(DEPENDENCIES actionlib_msgs sensor_msgs)
-include_directories(include deprecated/include ${catkin_INCLUDE_DIRS})
+add_service_files(DIRECTORY srv FILES Validate.srv Predict.srv)
+generate_messages(DEPENDENCIES std_msgs sensor_msgs asr_flir_ptu_driver)
+
+
+include(${wxWidgets_USE_FILE})
+include_directories( ${wxWidgets_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
 
 catkin_package(
-  INCLUDE_DIRS include deprecated/include
-  CATKIN_DEPENDS roscpp sensor_msgs
-  DEPENDS Boost
-)
-FILE(GLOB_RECURSE HEADERS "include/ptu_controller/*.h")
-add_executable(PTUController
-    ${HEADERS}
-  src/PTUController.cpp
-)
-target_link_libraries(PTUController
-  ${Boost_LIBRARIES}
-  ${catkin_LIBRARIES}
-)
-add_dependencies(PTUController
-	${catkin_EXPORTED_TARGETS}
-	${PROJECT_NAME}_generate_messages_cpp
-        asr_flir_ptu_driver_gencpp
-)
-add_executable(PTUControllerClient
-  src/PTUControllerClient.cpp
-)
-target_link_libraries(PTUControllerClient
-  ${Boost_LIBRARIES}
-  ${catkin_LIBRARIES}
-)
-add_dependencies(PTUControllerClient
-	${catkin_EXPORTED_TARGETS}
-	${PROJECT_NAME}_generate_messages_cpp
+    INCLUDE_DIRS include
+    CATKIN_DEPENDS roscpp std_srvs tf sensor_msgs message_runtime
+   # DEPENDS wxWidgets
 )
 
-add_library(PTUControllerCPP
-  deprecated/src/PTUControllerCPP.cpp
+
+
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
 )
-target_link_libraries(PTUControllerCPP
-  ${Boost_LIBRARIES}
-  ${catkin_LIBRARIES}
+
+#include( "${wxWidgets_USE_FILE}") 
+
+FILE(GLOB_RECURSE HEADERS "include/*.h")
+add_executable(
+ptu_driver 
+${HEADERS}
+src/driver/PTUNode.cpp 
+src/driver/PTUDriver.cpp 
+src/driver/PTUDriverMock.cpp
+src/driver/PTUFree.cpp
+#cpi-v1.09.15/code/ptu.c
+#cpi-v1.09.15/code/linuxser.c
 )
-add_dependencies(PTUControllerCPP
-	${catkin_EXPORTED_TARGETS}
-	${PROJECT_NAME}_generate_messages_cpp
-	asr_flir_ptu_driver_gencpp
+target_link_libraries(ptu_driver ${catkin_LIBRARIES})
+add_dependencies(ptu_driver asr_flir_ptu_driver_gencpp asr_flir_ptu_driver_generated_messages_cpp)
+
+
+
+add_executable(
+ptu_gui 
+src/gui/PTU_GUI_Node.cpp 
+src/gui/PTU_GUI.cpp 
+src/gui/GUI.cpp 
+src/gui/wxImagePanel.cpp
 )
+target_link_libraries(ptu_gui ${catkin_LIBRARIES} ${wxWidgets_LIBRARIES})
+add_dependencies(ptu_gui asr_flir_ptu_driver_gencpp asr_flir_ptu_driver_generated_messages_cpp)
+
+

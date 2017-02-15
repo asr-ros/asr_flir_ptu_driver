@@ -1,0 +1,4 @@
+ptu_pan_frame: ptu_pan_link
+ptu_pan_frame_rotated: ptu_pan_link_rotated
+ptu_tilt_frame: ptu_tilt_link
+ptu_tilt_frame_rotated: ptu_tilted_link

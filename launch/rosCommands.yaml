@@ -1,0 +1,9 @@
+ptu_base_frame:             ptu_pan_link
+ptu_pan_frame:              ptu_tilt_link
+ptu_tilt_frame:             ptu_tilted_link
+topicStateCommand:          state_cmd
+topicState:                 state
+ptuTopicState:              ptu_state
+serviceSettingsUpdate:      update_settings
+serviceSpeedControlUpdate:  update_speed_control
+serviceRange:               get_range

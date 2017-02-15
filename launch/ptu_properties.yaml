@@ -1,0 +1,52 @@
+#############
+### Notes ###
+#############
+#for move: 0=low power, 1=reg power, 2=high power; for hold: 0=off mode, 1=low power, 2=reg power
+
+#angles are in degrees
+#when standing behind PTU, negative pan is right and negative tilt is down
+
+########################
+### General Settings ###
+########################
+
+# whether the PTU takes position commands or speed commands
+speed_control: false
+
+# how fast the PTU outputs its own state in hz
+update_rate: 100
+
+#########################
+### Hardware Settings ###
+#########################
+
+#actual limits:
+#pan_min_angle: -159.126139
+#pan_max_angle: 159.177569
+
+#limits for work area
+pan_min_angle: -80
+pan_max_angle: 20
+pan_hold: 1
+pan_move: 0
+pan_base_speed: 240
+pan_target_speed: 1900
+pan_upper_speed: 2900
+pan_accel: 2700
+
+tilt_min_angle: -45.0
+tilt_max_angle: 25
+tilt_hold: 1
+tilt_move: 0
+tilt_base_speed: 290
+tilt_target_speed: 1900
+tilt_upper_speed: 2900
+tilt_accel: 2700
+
+forbidden_pan_min:  [50,    -180]
+forbidden_pan_max:  [180,   -50]
+forbidden_tilt_min: [-90,   -90]
+forbidden_tilt_max: [-25,   -25]
+
+computation_tolerance: 0.00005
+distance_factor: 10

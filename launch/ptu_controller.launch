@@ -1,9 +1,0 @@
-<launch>
-        <!-- Starts the PTU Controller.-->
-	<env name="ROSCONSOLE_CONFIG_FILE"
-             value="$(find asr_flir_ptu_controller)/launch/rosconsole.config"/>
-        <node name="PTUController" pkg="asr_flir_ptu_controller" type="PTUController" output="screen">
-            <param name="actionServerName" value="ptu_controller_actionlib"/>
-            <rosparam file="$(find asr_flir_ptu_controller)/launch/ptu_controller_settings.yaml"/>
-        </node>
-</launch>

@@ -1,0 +1,14 @@
+<launch>
+        <!-- Starts the PTU driver.-->
+        <env name="ROSCONSOLE_CONFIG_FILE"
+             value="$(find asr_flir_ptu_driver)/rosconsole.config"/>
+        <node name="asr_flir_ptu_driver" pkg="asr_flir_ptu_driver" type="ptu_driver" output="screen">
+                <param name="port" value="/dev/ttyUSB0"/>
+                <param name="baud" value="9600"/>
+                <param name="mockPTU" value="true"/>
+                <rosparam file="$(find asr_flir_ptu_driver)/launch/rosCommands.yaml"/>
+                <rosparam file="$(find asr_flir_ptu_driver)/launch/ptu_properties.yaml"/>
+                <rosparam file="$(find asr_flir_ptu_driver)/launch/ptu_frames.yaml"/>
+        </node>
+</launch>
+

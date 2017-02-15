@@ -1,0 +1,7 @@
+float64 pan
+float64 tilt
+float64 margin
+---
+bool is_valid
+float64 new_pan
+float64 new_tilt
