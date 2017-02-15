@@ -1,0 +1,7 @@
+timeToWait:         0.5
+tolerance:          0.1
+maxSteps:           1000
+topicName:          /asr_flir_ptu_driver/state_cmd
+commandTopicName:   /asr_flir_ptu_driver/ptu_state
+margin:             0.01
+

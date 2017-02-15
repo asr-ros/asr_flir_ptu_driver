@@ -1,0 +1,14 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+\b PTUController
+
+The PTU Controller is a wrapper object to provide black boxed functionality such as a moveTo method which moves
+the PTU head to the given angles. It also delivers methods like getMinimumPan, getMaximumPan, getMiniimumTilt,
+getMaximumTilt an so on.
+
+It's fun using it!
+
+
+*/

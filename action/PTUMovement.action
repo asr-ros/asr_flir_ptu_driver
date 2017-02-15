@@ -1,0 +1,9 @@
+#goal definition
+sensor_msgs/JointState target_joint
+---
+#result definition
+sensor_msgs/JointState end_joint
+---
+#feedback
+sensor_msgs/JointState base_joint
+float32 percentage

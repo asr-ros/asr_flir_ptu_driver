@@ -1,0 +1,16 @@
+<launch>
+	<arg name="testing" default="true" />
+        <arg name="testlog_filepath" default="$(find asr_flir_ptu_controller)/testlogs/testlog_1.txt" />
+        <!-- Starts the PTU Controller.-->
+        <env name="ROSCONSOLE_CONFIG_FILE"
+             value="$(find asr_flir_ptu_controller)/launch/rosconsole.config"/>
+        <node name="PTUControllerClient" pkg="asr_flir_ptu_controller" type="PTUControllerClient" output="screen">
+            <param name="actionServerName" value="ptu_controller_actionlib"/>
+            <param name="checkValidation" value="false"/>
+            <rosparam file="$(find asr_flir_ptu_controller)/launch/commands.yaml"/>
+            <rosparam file="$(find asr_flir_ptu_controller)/launch/ptu_controller_settings.yaml"/>
+            <rosparam file="$(find asr_flir_ptu_controller)/launch/commands.yaml"/>
+            <rosparam param="testing" subst_value="True">$(arg testing)</rosparam>
+            <rosparam param="testlog_filepath" subst_value="True">$(arg testlog_filepath)</rosparam>
+        </node>
+</launch>
