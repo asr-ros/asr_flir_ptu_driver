@@ -9,7 +9,7 @@
   <author>Joachim Gehrung</author>
   <author>Pascal Meißner</author>
   <author>Patrick Schlosser</author>
-  <maintainer email="pascal.meissner@kit.edu">Pascal Meißner</maintainer>
+  <maintainer email="asr-ros@lists.kit.edu">Pascal Meißner</maintainer>
   <license>BSD</license>
   <buildtool_depend>catkin</buildtool_depend>
   
