@@ -52,7 +52,7 @@ include_directories(
 
 FILE(GLOB_RECURSE HEADERS "include/*.h")
 add_executable(
-ptu_driver 
+asr_flir_ptu_driver 
 ${HEADERS}
 src/driver/PTUNode.cpp 
 src/driver/PTUDriver.cpp 
@@ -61,8 +61,8 @@ src/driver/PTUFree.cpp
 #cpi-v1.09.15/code/ptu.c
 #cpi-v1.09.15/code/linuxser.c
 )
-target_link_libraries(ptu_driver ${catkin_LIBRARIES})
-add_dependencies(ptu_driver asr_flir_ptu_driver_gencpp asr_flir_ptu_driver_generated_messages_cpp)
+target_link_libraries(asr_flir_ptu_driver ${catkin_LIBRARIES})
+add_dependencies(asr_flir_ptu_driver asr_flir_ptu_driver_gencpp asr_flir_ptu_driver_generated_messages_cpp)
 
 
 

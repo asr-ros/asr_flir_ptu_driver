@@ -37,8 +37,7 @@ PTUDriver::PTUDriver(const char* port, int baud, bool speed_control) {
    #endif // __PTU_FREE_INCLUDED__
 
    /*
-    * The PTU comes with a file, test.c, to be found within the asr_flir_ptu_driver directory.
-    * Path: asr_flir_ptu_driver/cpi-v1.09.15/code/test.c
+    * With the PTU comes a file, test.c, to be found with the purchasable driver version for the flir ptu.
     * In Line 632 a test function for the resolution is declared.
     * The value get_current delivers is devided by 3600 there to get min arc
     * Therefore it needs to be devided by another 60 to recieve degree.

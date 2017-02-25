@@ -234,7 +234,7 @@ bool PTUNode::setSettings() {
       ROS_DEBUG("serviceSpeedControlUpdate: %s", service_speed_control_update.c_str());
       ROS_DEBUG("serviceRange: %s", service_range.c_str());
 
-      //add the namespace of the ptu_driver to the list of ptu namespaces. This is necessary to 'find' the PTU with the gui
+      //add the namespace of the asr_flir_ptu_driver to the list of ptu namespaces. This is necessary to 'find' the PTU with the gui
       if (node_handle.hasParam("ptu_namespaces"))
 	{
 	  ROS_INFO("Set namespace");
@@ -316,7 +316,7 @@ void PTUNode::spinOnce() {
 }
 
 int main(int argc, char **argv) {
-    ros::init(argc, argv, "ptu_driver");
+    ros::init(argc, argv, "asr_flir_ptu_driver");
     ros::NodeHandle n("~");
     PTUNode* node = new PTUNode(n);
 
