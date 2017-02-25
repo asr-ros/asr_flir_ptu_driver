@@ -18,6 +18,7 @@
 #include "driver/PTUDriverMock.h"
 #include "asr_flir_ptu_driver/State.h"
 #include "asr_flir_ptu_driver/Predict.h"
+#include "asr_flir_ptu_driver/Range.h"
 
 //Test porpouse only
 #include "PTUFree.h"
@@ -51,7 +52,7 @@ class PTUNode {
         bool validatePanTilt(asr_flir_ptu_driver::Validate::Request &req, asr_flir_ptu_driver::Validate::Response &res);
         bool emptyAlive(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
         bool predict(asr_flir_ptu_driver::Predict::Request &req, asr_flir_ptu_driver::Predict::Response &res);
-        bool validatePanTilt(asr_flir_ptu_driver::Range::Request &req, asr_flir_ptu_driver::Range::Response &res);
+        bool getRange(asr_flir_ptu_driver::Range::Request &req, asr_flir_ptu_driver::Range::Response &res);
         asr_flir_ptu_driver::PTUDriver* ptu;
         ros::NodeHandle node_handle;
 
@@ -87,6 +88,9 @@ class PTUNode {
         std::string service_settings_update;
         std::string service_speed_control_update;
         std::string service_range;
+        std::string service_validation;
+        std::string service_alive;
+        std::string service_path_prediction;
 
         // used for conversion between radian and degrees
         static const double DEG_TO_RAD = M_PI / 180.0;

@@ -28,7 +28,7 @@ FILES
 State.msg
 )
 
-add_service_files(DIRECTORY srv FILES Validate.srv Predict.srv)
+add_service_files(DIRECTORY srv FILES Validate.srv Predict.srv Range.srv)
 generate_messages(DEPENDENCIES std_msgs sensor_msgs asr_flir_ptu_driver)
 
 

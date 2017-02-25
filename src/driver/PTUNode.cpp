@@ -36,13 +36,13 @@ PTUNode::PTUNode(ros::NodeHandle& node_handle):node_handle(node_handle) {
     joint_pub_old = node_handle.advertise<sensor_msgs::JointState>(topic_state, 1);
 
     //name is a placeholder for testing
-    validate_service = node_handle.advertiseService("/validation_service", &PTUNode::validatePanTilt, this);
-    alive_service = node_handle.advertiseService("/alive_service", &PTUNode::emptyAlive, this);
-    path_prediction_service = node_handle.advertiseService("/path_prediction", &PTUNode::predict, this);
+    validate_service = node_handle.advertiseService(service_validation, &PTUNode::validatePanTilt, this);
+    alive_service = node_handle.advertiseService(service_alive, &PTUNode::emptyAlive, this);
+    path_prediction_service = node_handle.advertiseService(service_path_prediction, &PTUNode::predict, this);
     //goal_fulfilled_service = node_handle.advertiseService("/goal_fulfilled", &PTUNode::goalFulfilled, this);
 
     //Required for some external packages (not asr_flir_ptu_driver). If time left, check if really necessary in the other packages.
-    range_service = node_handle.advertiseService("/get_range", &PTUNode::getRange, this);
+    range_service = node_handle.advertiseService(service_range, &PTUNode::getRange, this);
 
 
     settings_service = node_handle.advertiseService(service_settings_update, &PTUNode::updateSettings, this);
@@ -125,16 +125,21 @@ bool PTUNode::updateSettings(std_srvs::Empty::Request&, std_srvs::Empty::Respons
 	return setSettings();
 }
 
-bool PTUNode::validatePanTilt(asr_flir_ptu_driver::Range::Request &req, asr_flir_ptu_driver::Range::Response &res)
+bool PTUNode::getRange(asr_flir_ptu_driver::Range::Request &req, asr_flir_ptu_driver::Range::Response &res)
 {
     res.pan_min_angle = ptu->getLimitAngle('p', 'l');
     res.pan_max_angle = ptu->getLimitAngle('p', 'u');
     res.tilt_min_angle = ptu->getLimitAngle('t', 'l');
     res.tilt_max_angle = ptu->getLimitAngle('t', 'u');
-    res.forbidden_pan_min = node_handle.getParam("forbidden_pan_min", forbidden_pan_min);
-    res.forbidden_pan_max = node_handle.getParam("forbidden_pan_max", forbidden_pan_max);
-    res.forbidden_tilt_min = node_handle.getParam("forbidden_tilt_min", forbidden_tilt_min);
-    res.forbidden_tilt_max = node_handle.getParam("forbidden_tilt_max", forbidden_tilt_max);
+    std::vector<double> forbidden_pan_min, forbidden_pan_max, forbidden_tilt_min, forbidden_tilt_max;
+    node_handle.getParam("forbidden_pan_min", forbidden_pan_min);
+    node_handle.getParam("forbidden_pan_max", forbidden_pan_max);
+    node_handle.getParam("forbidden_tilt_min", forbidden_tilt_min);
+    node_handle.getParam("forbidden_tilt_max", forbidden_tilt_max);
+    res.forbidden_pan_min = forbidden_pan_min;
+    res.forbidden_pan_max = forbidden_pan_max;
+    res.forbidden_tilt_min = forbidden_tilt_min;
+    res.forbidden_tilt_max = forbidden_tilt_max;
     return true;
 
 }
@@ -246,6 +251,9 @@ bool PTUNode::setSettings() {
       node_handle.getParam("serviceSettingsUpdate", service_settings_update);
       node_handle.getParam("serviceSpeedControlUpdate", service_speed_control_update);
       node_handle.getParam("serviceRange", service_range);
+      node_handle.getParam("serviceValidation", service_validation);
+      node_handle.getParam("serviceAlive", service_alive);
+      node_handle.getParam("servicePathPrediction", service_path_prediction);
 
       ROS_DEBUG("serviceSettingsUpdate: %s", service_settings_update.c_str());
       ROS_DEBUG("serviceSpeedControlUpdate: %s", service_speed_control_update.c_str());

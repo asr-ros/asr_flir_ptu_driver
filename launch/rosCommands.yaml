@@ -2,8 +2,11 @@ ptu_base_frame:             ptu_pan_link
 ptu_pan_frame:              ptu_tilt_link
 ptu_tilt_frame:             ptu_tilted_link
 topicStateCommand:          state_cmd
-topicState:                 state
+topicState:                 state      
 ptuTopicState:              ptu_state
+serviceValidation:          validation_service
+serviceAlive:               alive_service
+servicePathPrediction:      path_prediction
 serviceSettingsUpdate:      update_settings
 serviceSpeedControlUpdate:  update_speed_control
 serviceRange:               get_range
