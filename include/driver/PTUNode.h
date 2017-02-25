@@ -51,17 +51,19 @@ class PTUNode {
         bool validatePanTilt(asr_flir_ptu_driver::Validate::Request &req, asr_flir_ptu_driver::Validate::Response &res);
         bool emptyAlive(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
         bool predict(asr_flir_ptu_driver::Predict::Request &req, asr_flir_ptu_driver::Predict::Response &res);
+        bool validatePanTilt(asr_flir_ptu_driver::Range::Request &req, asr_flir_ptu_driver::Range::Response &res);
         asr_flir_ptu_driver::PTUDriver* ptu;
         ros::NodeHandle node_handle;
 
         ros::Subscriber joint_sub;
         ros::Publisher joint_pub;
-	ros::Publisher joint_pub_old;
+        ros::Publisher joint_pub_old;
         ros::ServiceServer validate_service;
         ros::ServiceServer alive_service;
         ros::ServiceServer settings_service;
         ros::ServiceServer speedmode_service;
         ros::ServiceServer path_prediction_service;
+        ros::ServiceServer range_service;
         bool goal_not_reached;
         int seq_num;
 	

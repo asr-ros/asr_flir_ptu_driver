@@ -32,7 +32,7 @@ PTUNode::PTUNode(ros::NodeHandle& node_handle):node_handle(node_handle) {
     joint_sub = node_handle.subscribe<asr_flir_ptu_driver::State>(topic_state_command, 1, &PTUNode::setState, this);
     joint_pub = node_handle.advertise<asr_flir_ptu_driver::State>(ptu_topic_state, 1);
 
-    //Required for some external packages, not ptu_controller (maybe fix there if time left, they expect the old sensor_msgs::JointState instead of asr_flir_ptu_driver::State)
+    //Required for some external packages, not asr_flir_ptu_controller (maybe fix there if time left, they expect the old sensor_msgs::JointState instead of asr_flir_ptu_driver::State)
     joint_pub_old = node_handle.advertise<sensor_msgs::JointState>(topic_state, 1);
 
     //name is a placeholder for testing
@@ -40,6 +40,9 @@ PTUNode::PTUNode(ros::NodeHandle& node_handle):node_handle(node_handle) {
     alive_service = node_handle.advertiseService("/alive_service", &PTUNode::emptyAlive, this);
     path_prediction_service = node_handle.advertiseService("/path_prediction", &PTUNode::predict, this);
     //goal_fulfilled_service = node_handle.advertiseService("/goal_fulfilled", &PTUNode::goalFulfilled, this);
+
+    //Required for some external packages (not asr_flir_ptu_driver). If time left, check if really necessary in the other packages.
+    range_service = node_handle.advertiseService("/get_range", &PTUNode::getRange, this);
 
 
     settings_service = node_handle.advertiseService(service_settings_update, &PTUNode::updateSettings, this);
@@ -120,6 +123,20 @@ bool PTUNode::emptyAlive(std_srvs::Empty::Request &req, std_srvs::Empty::Respons
 
 bool PTUNode::updateSettings(std_srvs::Empty::Request&, std_srvs::Empty::Response&) {
 	return setSettings();
+}
+
+bool PTUNode::validatePanTilt(asr_flir_ptu_driver::Range::Request &req, asr_flir_ptu_driver::Range::Response &res)
+{
+    res.pan_min_angle = ptu->getLimitAngle('p', 'l');
+    res.pan_max_angle = ptu->getLimitAngle('p', 'u');
+    res.tilt_min_angle = ptu->getLimitAngle('t', 'l');
+    res.tilt_max_angle = ptu->getLimitAngle('t', 'u');
+    res.forbidden_pan_min = node_handle.getParam("forbidden_pan_min", forbidden_pan_min);
+    res.forbidden_pan_max = node_handle.getParam("forbidden_pan_max", forbidden_pan_max);
+    res.forbidden_tilt_min = node_handle.getParam("forbidden_tilt_min", forbidden_tilt_min);
+    res.forbidden_tilt_max = node_handle.getParam("forbidden_tilt_max", forbidden_tilt_max);
+    return true;
+
 }
 
 bool PTUNode::setSettings() {
