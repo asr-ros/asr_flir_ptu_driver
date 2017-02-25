@@ -341,7 +341,7 @@ void PTUNode::spinOnce() {
 }
 
 int main(int argc, char **argv) {
-    ros::init(argc, argv, "asr_flir_ptu_driver");
+    ros::init(argc, argv, "ptu_driver");
     ros::NodeHandle n("~");
     PTUNode* node = new PTUNode(n);
 
