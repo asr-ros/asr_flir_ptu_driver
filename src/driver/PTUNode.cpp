@@ -58,7 +58,7 @@ PTUNode::~PTUNode() {
 
 
 void PTUNode::setState(const asr_flir_ptu_driver::State::ConstPtr& msg) {
-    ROS_ERROR("STATE RECIVIED");
+    ROS_ERROR("STATE RECEIVED");
 	ROS_DEBUG("SETSTATE REQUEST - START");
     double pan = msg->state.position[0];
     double tilt = msg->state.position[1];
