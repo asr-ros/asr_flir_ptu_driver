@@ -49,7 +49,7 @@ PTU_GUI::PTU_GUI( wxWindow* parent ) : GUIDialog( parent )
 	leftImageSubscriber = nh.subscribe<sensor_msgs::Image>("left/image_color", 1, &PTU_GUI::onLeftImage, this);
 	rightImageSubscriber = nh.subscribe<sensor_msgs::Image>("right/image_color", 1, &PTU_GUI::onRightImage, this);
 
-    predict_client = nh.serviceClient<asr_flir_ptu_driver::Predict>("/path_prediction");
+    predict_client = nh.serviceClient<asr_flir_ptu_driver::Predict>("/asr_flir_ptu_driver/path_prediction");
 
 	wxBitmap* imageLeft = new wxBitmap(wxImage(640, 480));
 	leftPanel->setImage(imageLeft);
@@ -59,7 +59,7 @@ PTU_GUI::PTU_GUI( wxWindow* parent ) : GUIDialog( parent )
 	rightPanel->setImage(imageRight);
 	rightPanel->paintNow();
     seq_num = 0;
-    ptu.getParam("ptu_gui/path_prediction", use_path_prediction);
+    ptu.getParam("asr_flir_ptu_gui/path_prediction", use_path_prediction);
 }
 
 void PTU_GUI::updatePTUInfo() {

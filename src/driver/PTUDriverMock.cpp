@@ -13,6 +13,7 @@ namespace asr_flir_ptu_driver {
         tilt_angle = 0;
         pan_speed = 0;
         tilt_speed = 0;
+        setLimitAnglesToHardwareConstraints();
     }
 
     bool PTUDriverMock::isConnected()
@@ -61,9 +62,11 @@ namespace asr_flir_ptu_driver {
 
     bool PTUDriverMock::setAbsoluteAngles(double pan_angle, double tilt_angle, bool no_forbidden_area_check) {
         if (isInForbiddenArea(pan_angle, tilt_angle)) {
+            ROS_ERROR("PAN and TILT lie within forbidden area");
             return false;
         }
         if (!isWithinPanTiltLimits(pan_angle, tilt_angle)){
+            ROS_ERROR("PAN/TILT out of pan/tilt bounds");
             return false;
         }
         ROS_DEBUG("setAbsoluteAngles");
@@ -73,6 +76,8 @@ namespace asr_flir_ptu_driver {
         this->pan_angle = pan_angle;
         this->tilt_angle = tilt_angle;
         is_stopped_count++;
+
+        ROS_INFO("Successfull set Pan and Tilt. PAN: %f, TILT: %f\n", pan_angle, tilt_angle);
         return true;
     }
     void PTUDriverMock::setSpeedControlMode(bool speed_control_mode) {
@@ -169,16 +174,26 @@ namespace asr_flir_ptu_driver {
 
 
     void PTUDriverMock::setLimitAnglesToHardwareConstraints() {
-        //only matching values of specific ptu
-        this->pan_min_limit = -159.0;
-        this->pan_max_limit = 159.0;
-        this->tilt_min_limit = -46.0;
-        this->tilt_max_limit = 31.0;
+        ros::NodeHandle n("~");
+        double pan_min_limit, pan_max_limit, tilt_min_limit, tilt_max_limit;
+        n.getParam("mock_pan_min", pan_min_limit);
+        n.getParam("mock_pan_max", pan_max_limit);
+        n.getParam("mock_tilt_min", tilt_min_limit);
+        n.getParam("mock_tilt_max", tilt_max_limit);
+
+        this->pan_min_limit = pan_min_limit;
+        this->pan_max_limit = pan_max_limit;
+        this->tilt_min_limit = tilt_min_limit;
+        this->tilt_max_limit = tilt_max_limit;
+
+        ROS_DEBUG("pan_min_limit: %f, pan_max_limit: %f, tilt_min_limit: %f, tilt_max_limit: %f", pan_min_limit, pan_max_limit, tilt_min_limit, tilt_max_limit);
+
     }
 
     //DO NOT USE, NOT INTENDED TO USE WITH PTU DRIVER MOCK
     std::vector<double> PTUDriverMock::determineLegitEndPoint(double end_point_pan_candidate, double end_point_tilt_candidate) {
         ROS_ERROR("DO NOT USE determineLegitEndPoint WITH PTU DRIVER MOCK");
+        ROS_ERROR("Maybe you enabled path_prediction in one of the launch files you use. Path prediction is not intended to be used with the mock launch files");
         std::vector<double> dummy;
         dummy.push_back(end_point_pan_candidate);
         dummy.push_back(end_point_tilt_candidate);

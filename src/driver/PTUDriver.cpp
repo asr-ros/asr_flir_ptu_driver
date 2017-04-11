@@ -398,7 +398,7 @@ bool PTUDriver::isWithinPanTiltLimits(double pan, double tilt) {
 }
 
 bool PTUDriver::setValuesOutOfLimitsButWithinMarginToLimit(double * pan, double * tilt, double margin) {
-   ROS_DEBUG("PAN: %f, TILT: %f\n", *pan, *tilt);
+   ROS_DEBUG("Before margin check: PAN: %f, TILT: %f\n", *pan, *tilt);
    long margin_as_position = convertPanFromAngleToPosition(margin);
    if(((pan_max - pan_min) <= margin_as_position) || ((tilt_max - tilt_min) <= margin_as_position)) {
 
@@ -431,10 +431,11 @@ bool PTUDriver::setValuesOutOfLimitsButWithinMarginToLimit(double * pan, double 
    }
 
    if(isWithinPanTiltLimits(*pan, *tilt)) {
-       ROS_ERROR("PAN: %f, TILT: %f\n", *pan, *tilt);
+       ROS_DEBUG("After margin check: PAN: %f, TILT: %f\n", *pan, *tilt);
        return true;
    }
    else {
+       ROS_ERROR("PAN/TILT out of bounds (PAN: %f, TILT: %f)", *pan, *tilt);
        return false;
    }
 }
@@ -467,6 +468,7 @@ bool PTUDriver::setAbsoluteAngles(double pan_angle, double tilt_angle, bool no_f
          || (tilt_short_angle < tilt_min)
          || (tilt_short_angle > tilt_max))
    {
+       ROS_ERROR("PAN/TILT angle not within pan/tilt bounds");
        return false;
    }
    char return_code;
@@ -478,6 +480,7 @@ bool PTUDriver::setAbsoluteAngles(double pan_angle, double tilt_angle, bool no_f
    return_code = set_desired(TILT, POSITION, &tilt_short_angle, ABSOLUTE);
    ROS_DEBUG_STREAM("set_desired(TILT, POSITION, " << tilt_short_angle << ", ABSOLUTE) returned "
                   << getErrorString(return_code) );
+   ROS_INFO("Successfully set Pan and Tilt. PAN: %f, TILT: %f\n", pan_angle, tilt_angle);
    return true;
 }
 

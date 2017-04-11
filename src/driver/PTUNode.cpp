@@ -58,8 +58,8 @@ PTUNode::~PTUNode() {
 
 
 void PTUNode::setState(const asr_flir_ptu_driver::State::ConstPtr& msg) {
-    ROS_ERROR("STATE RECEIVED");
-	ROS_DEBUG("SETSTATE REQUEST - START");
+    ROS_INFO("STATE RECEIVED");
+    ROS_DEBUG("SETSTATE REQUEST - START");
     double pan = msg->state.position[0];
     double tilt = msg->state.position[1];
     double pan_speed = msg->state.velocity[0];
@@ -67,17 +67,17 @@ void PTUNode::setState(const asr_flir_ptu_driver::State::ConstPtr& msg) {
     seq_num = msg->seq_num;
     ROS_DEBUG_STREAM("Node received state_cmd message: (p,t)=(" << pan << "," << tilt << ") and (v_p,v_t)=(" << pan_speed << "," << tilt_speed << ").");
 
-	if (ptu->isInSpeedControlMode()) {
+    if (ptu->isInSpeedControlMode()) {
         ROS_DEBUG("PTU is in SpeedcontrolMode");
         ptu->setAbsoluteAngleSpeeds(pan_speed, tilt_speed);
-	} else {
+    } else {
         ROS_DEBUG("PTU is NOT in SpeedcontrolMode");
         ptu->setAbsoluteAngles(pan, tilt, msg->no_check_forbidden_area);
         goal_not_reached = true;
         node_handle.setParam("reached_desired_position", false);
 
-	}
-	ROS_DEBUG("SETSTATE REQUEST - END");
+    }
+    ROS_DEBUG("SETSTATE REQUEST - END");
 
 }
 
@@ -90,16 +90,16 @@ bool PTUNode::validatePanTilt(asr_flir_ptu_driver::Validate::Request &req, asr_f
     if(ptu->setValuesOutOfLimitsButWithinMarginToLimit(&pan, &tilt, margin)) {
         if(ptu->isInForbiddenArea(pan, tilt)) {
             res.is_valid = false;
-            ROS_ERROR("FORBIDDEN");
+            ROS_DEBUG("FORBIDDEN");
         }
         else {
             res.is_valid = true;
-            ROS_ERROR("VALID");
+            ROS_DEBUG("VALID");
         }
     }
     else {
         res.is_valid = false;
-        ROS_ERROR("OUT OF BOUNDS");
+        ROS_DEBUG("OUT OF BOUNDS");
     }
     res.new_pan = pan;
     res.new_tilt = tilt;

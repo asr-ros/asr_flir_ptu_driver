@@ -1,5 +1,6 @@
 <launch>
+        <arg name="path_prediction" default="false"/> 
         <node name="asr_flir_ptu_gui" pkg="asr_flir_ptu_driver" type="ptu_gui">
-	  <param name="path_prediction" value="false"/>
+	  <param name="path_prediction" value="$(arg path_prediction)"/>
 	</node>
 </launch>

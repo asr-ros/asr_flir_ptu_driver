@@ -50,3 +50,8 @@ forbidden_tilt_max: [-25,   -25]
 
 computation_tolerance: 0.00005
 distance_factor: 10
+
+mock_pan_min: -159.0
+mock_pan_max: 159.0
+mock_tilt_min: -46.0
+mock_tilt_max: 31.0
