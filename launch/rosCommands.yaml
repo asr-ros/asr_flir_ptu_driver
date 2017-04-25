@@ -1,6 +1,6 @@
 ptu_base_frame:             ptu_pan_link
-ptu_pan_frame:              ptu_tilt_link
-ptu_tilt_frame:             ptu_tilted_link
+#ptu_pan_frame:              ptu_tilt_link
+#ptu_tilt_frame:             ptu_tilted_link
 topicStateCommand:          state_cmd
 topicState:                 state      
 ptuTopicState:              ptu_state

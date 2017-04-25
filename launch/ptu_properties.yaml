@@ -20,9 +20,6 @@ update_rate: 100
 ### Hardware Settings ###
 #########################
 
-#actual limits:
-#pan_min_angle: -159.126139
-#pan_max_angle: 159.177569
 
 #limits for work area
 pan_min_angle: -80
@@ -51,7 +48,9 @@ forbidden_tilt_max: [-25,   -25]
 computation_tolerance: 0.00005
 distance_factor: 10
 
-mock_pan_min: -159.0
-mock_pan_max: 159.0
-mock_tilt_min: -46.0
-mock_tilt_max: 31.0
+#Necessary because it is not possible to read any data from ptu when using the mock
+
+mock_pan_min_hardware_limit: -159.0
+mock_pan_max_hardware_limit: 159.0
+mock_tilt_min_hardware_limit: -46.0
+mock_tilt_max_hardware_limit: 31.0

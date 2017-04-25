@@ -176,10 +176,10 @@ namespace asr_flir_ptu_driver {
     void PTUDriverMock::setLimitAnglesToHardwareConstraints() {
         ros::NodeHandle n("~");
         double pan_min_limit, pan_max_limit, tilt_min_limit, tilt_max_limit;
-        n.getParam("mock_pan_min", pan_min_limit);
-        n.getParam("mock_pan_max", pan_max_limit);
-        n.getParam("mock_tilt_min", tilt_min_limit);
-        n.getParam("mock_tilt_max", tilt_max_limit);
+        n.getParam("mock_pan_min_hardware_limit", pan_min_limit);
+        n.getParam("mock_pan_max_hardware_limit", pan_max_limit);
+        n.getParam("mock_tilt_min_hardware_limit", tilt_min_limit);
+        n.getParam("mock_tilt_max_hardware_limit", tilt_max_limit);
 
         this->pan_min_limit = pan_min_limit;
         this->pan_max_limit = pan_max_limit;
