@@ -23,7 +23,7 @@ update_rate: 100
 
 #limits for work area
 pan_min_angle: -80
-pan_max_angle: 20
+pan_max_angle: 80
 pan_hold: 1
 pan_move: 0
 pan_base_speed: 240
