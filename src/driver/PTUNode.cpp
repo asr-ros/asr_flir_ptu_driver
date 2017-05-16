@@ -1,5 +1,6 @@
 #include "driver/PTUNode.h"
 
+
 PTUNode::PTUNode(ros::NodeHandle& node_handle):node_handle(node_handle) {
 	std::string port;
 	int baud;
@@ -15,7 +16,18 @@ PTUNode::PTUNode(ros::NodeHandle& node_handle):node_handle(node_handle) {
         ptu = new asr_flir_ptu_driver::PTUDriverMock(port.c_str(), baud, speed_control);
     }
     else {
-        ptu = new asr_flir_ptu_driver::PTUDriver(port.c_str(), baud, speed_control);
+        bool no_device_found = true;
+        while(no_device_found) {
+            no_device_found = false;
+            try {
+                ptu = new asr_flir_ptu_driver::PTUDriver(port.c_str(), baud, speed_control);
+            }
+            catch(std::exception &e) {
+                ROS_ERROR("NO DEVICE FOUND CONNECTED TO SERIAL PORT %s", port.c_str());
+                no_device_found = true;
+                sleep(5);
+            }
+        }
     }
 
     if (ptu->isConnected()) {
