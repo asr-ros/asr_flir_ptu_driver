@@ -6,7 +6,7 @@ PTUNode::PTUNode(ros::NodeHandle& node_handle):node_handle(node_handle) {
 	int baud;
     bool speed_control;
     bool mock_PTU = false;
-    goal_not_reached = false;
+    //goal_not_reached = false;
     node_handle.getParam("port", port);
     node_handle.getParam("baud", baud);
     node_handle.getParam("speed_control", speed_control);
@@ -85,7 +85,7 @@ void PTUNode::setState(const asr_flir_ptu_driver::State::ConstPtr& msg) {
     } else {
         ROS_DEBUG("PTU is NOT in SpeedcontrolMode");
         ptu->setAbsoluteAngles(pan, tilt, msg->no_check_forbidden_area);
-        goal_not_reached = true;
+        //goal_not_reached = true;
         node_handle.setParam("reached_desired_position", false);
 
     }
@@ -317,7 +317,7 @@ void PTUNode::spinOnce() {
     //if(goal_not_reached || ptu->isInSpeedControlMode()) {
         bool done = ptu->hasHaltedAndReachedGoal();
         node_handle.setParam("reached_desired_position", done);
-        if(done) goal_not_reached == false;
+        //if(done) goal_not_reached = false;
 
         //update joint state
         sensor_msgs::JointState state;

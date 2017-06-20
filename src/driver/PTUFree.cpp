@@ -84,9 +84,9 @@ namespace ptu_free {
             if(current_letter == '\n') {
                 //HOTFIX solution: Asynchronous responses in successfull messages get cut out. In unsuccessfull messages they stay in because they gonna return false/ERROR later on anyway
                 //Only printf message can be messed up in error case a little bit. Since that error does not occure often it is tolerated for the moment.
-                size_t star_pos = recieved_message.find('*');
-                if(star_pos != std::string::npos) {
-                    recieved_message = recieved_message.substr(star_pos);
+                size_t start_pos = recieved_message.find('*');
+                if(start_pos != std::string::npos) {
+                    recieved_message = recieved_message.substr(start_pos);
                 }
                 return recieved_message;
             }
@@ -108,13 +108,13 @@ namespace ptu_free {
             for (int i = 0; i < 10; i++) {
                 first_found_position = response.find(boost::lexical_cast<std::string>(i));
                 if(first_found_position != std::string::npos) {
-                        if(first_found_position < start_position) {
+                        if((int) first_found_position < start_position) {
                             start_position = first_found_position;
                         }
                 }
                 last_found_position = response.rfind(boost::lexical_cast<std::string>(i));
-                if(last_found_position != std::string::npos) {
-                        if(last_found_position > end_position) {
+                if( last_found_position != std::string::npos) {
+                        if((int) last_found_position > end_position) {
                             end_position = last_found_position;
                         }
                 }
@@ -906,20 +906,24 @@ namespace ptu_free {
         short int prev_pan = getDesiredPanPosition();
         worked = setDesiredPanPositionAbsolute(pan);
         if(!worked) {
-            setPositionExecutionMode(IMMEDIATE_POSITION_EXECUTION_MODE);
+            setPositionExecutionMode(previous_mode);
             return false;
         }
+        short int prev_tilt = getDesiredTiltPosition();
         worked = setDesiredTiltPositionAbsolute(tilt);
         if(!worked) {
             setDesiredPanPositionAbsolute(prev_pan);
-            setPositionExecutionMode(IMMEDIATE_POSITION_EXECUTION_MODE);
+            setPositionExecutionMode(previous_mode);
             return false;
         }
         worked = awaitPositionCommandCompletion();
         if(!worked) {
+            setDesiredPanPositionAbsolute(prev_pan);
+            setDesiredTiltPositionAbsolute(prev_tilt);
+            setPositionExecutionMode(previous_mode);
             return false;
         }
-        worked = setPositionExecutionMode(IMMEDIATE_POSITION_EXECUTION_MODE);
+        worked = setPositionExecutionMode(previous_mode);
         if(!worked) {
             return false;
         }
@@ -930,12 +934,12 @@ namespace ptu_free {
 
     //WARNING: NOT SUPPORTED IN OLDER PTU VERSIONS, NOT TESTED (PTU VERSION TOO OLD)
     bool PTUFree::setPreset(int preset_index, short int pan, short int tilt) {
-        short int prevPan = getDesiredPanPosition();
+        short int prev_pan = getDesiredPanPosition();
         if(!setDesiredPanPositionAbsolute(pan)) {
             return false;
         }
         if(!setDesiredTiltPositionAbsolute(tilt)) {
-            setDesiredPanPositionAbsolute(pan);
+            setDesiredPanPositionAbsolute(prev_pan);
             return false;
         }
         awaitPositionCommandCompletion();
@@ -2047,9 +2051,9 @@ namespace ptu_free {
             //Changing speed bounds is not possible on the fly, needs long break
             sleep(6);
 
-            long mod_upper_limit_pan = getPanUpperSpeedLimit();
+            //long mod_upper_limit_pan = getPanUpperSpeedLimit();
             long mod_lower_limit_pan = getPanLowerSpeedLimit();
-            long mod_upper_limit_tilt = getTiltUpperSpeedLimit();
+            //long mod_upper_limit_tilt = getTiltUpperSpeedLimit();
             long mod_lower_limit_tilt = getTiltLowerSpeedLimit();
             /*
             if(mod_upper_limit_pan != (upper_limit_pan - 1)) {

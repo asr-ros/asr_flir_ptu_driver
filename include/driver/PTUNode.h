@@ -65,7 +65,7 @@ class PTUNode {
         ros::ServiceServer speedmode_service;
         ros::ServiceServer path_prediction_service;
         ros::ServiceServer range_service;
-        bool goal_not_reached;
+        //bool goal_not_reached;
         int seq_num;
 	
 	std::string ptu_topic_state;

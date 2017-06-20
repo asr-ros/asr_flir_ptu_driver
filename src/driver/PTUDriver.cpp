@@ -705,6 +705,7 @@ std::vector<double> PTUDriver::getAccelerationTimeAndSlewSpeedTime(double distan
        }
        else if(speed_candidates.size() == 1) {
            solution.push_back(speed_candidates[0]);
+           return solution;
        }
        else {
            double new_acceleration_time_to_desired_speed_candidate_one = speed_candidates[0] / acceleration;
@@ -837,7 +838,7 @@ std::vector<double> PTUDriver::predictPositionInTime(std::vector<double> start_p
 
 //It is assumed that deccelleration_time is maximum as large as acceleration_time
 double PTUDriver::calculateCoveredDistance(double acceleration_time, double slew_speed_time, double decceleration_time, bool is_pan) {
-   char type;
+   //char type;
    long prefetched_base;
    long prefetched_accel;
    if(is_pan) {
@@ -877,7 +878,7 @@ std::vector<double> PTUDriver::calculatePointOfIntersectionWithForbiddenAreas(st
    std::vector<double> intersection_point;
    std::vector<double> route_coordiante_form = calculateCoordinateForm(start_point, end_point);
 
-   for (int i = 0; i < forbidden_areas.size(); i++) {
+   for (unsigned int i = 0; i < forbidden_areas.size(); i++) {
 
        std::vector<double> first_intersection_point = calculateIntersectionPoint(route_coordiante_form, forbidden_area_first_line_coordinate_forms[i]);
        std::vector<double> second_intersection_point = calculateIntersectionPoint(route_coordiante_form, forbidden_area_second_line_coordinate_forms[i]);
@@ -1005,7 +1006,7 @@ std::vector<double> PTUDriver::calculateCoordinateForm(std::vector<double> start
 
 double PTUDriver::getVectorLength(std::vector<double> input_vector) {
    double length = 0.0;
-   for(int i = 0; i < input_vector.size(); i++) {
+   for(unsigned int i = 0; i < input_vector.size(); i++) {
        length += pow(input_vector[i], 2);
    }
    return sqrt(length);
@@ -1016,7 +1017,7 @@ double PTUDriver::getVectorLength(std::vector<double> start_point, std::vector<d
        return -1.0;
    }
    std::vector<double> length_vector(start_point.size());
-   for (int i = 0; i < start_point.size(); i++) {
+   for (unsigned int i = 0; i < start_point.size(); i++) {
        length_vector[i] = end_point[i] - start_point[i];
    }
    return getVectorLength(length_vector);
@@ -1092,7 +1093,7 @@ std::vector<double> PTUDriver::checkForPossibleKollision(double new_pan_angle, d
 
 
 void PTUDriver::precalculateForbiddenAreaCoodinateForms() {
-    for (int i = 0; i < forbidden_areas.size(); i++) {
+    for (unsigned int i = 0; i < forbidden_areas.size(); i++) {
        std::vector<double> max_pan_max_tilt_point;
        max_pan_max_tilt_point.push_back(forbidden_areas[i]["pan_max"]);
        max_pan_max_tilt_point.push_back(forbidden_areas[i]["tilt_max"]);
@@ -1270,7 +1271,7 @@ char PTUDriver::set_desired(char pan_or_tilt, char what, short int * value, char
                    return PTU_NOT_OK;
                }
            }
-           else if (*value = PTU_HI_POWER) {
+           else if (*value == PTU_HI_POWER) {
                if(free_ptu.setPanInMotionPowerMode(HIGH_MOVE_POWER_MODE)) {
                    return PTU_OK;
                }
