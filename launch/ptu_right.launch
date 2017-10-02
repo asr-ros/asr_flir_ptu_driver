@@ -6,9 +6,9 @@
 	  	<param name="port" value="/dev/ttyUSB1"/>
 		<param name="baud" value="9600"/>
 		<param name="mockPTU" value="false"/>
-                <rosparam file="$(find asr_flir_ptu_driver)/launch/rosCommands.yaml"/>
-                <rosparam file="$(find asr_flir_ptu_driver)/launch/ptu_properties.yaml"/>
-                <rosparam file="$(find asr_flir_ptu_driver)/launch/ptu_frames.yaml"/>
+                <rosparam file="$(find asr_flir_ptu_driver)/param/rosCommands.yaml"/>
+                <rosparam file="$(find asr_flir_ptu_driver)/param/ptu_properties.yaml"/>
+                <rosparam file="$(find asr_flir_ptu_driver)/param/ptu_frames.yaml"/>
  	</node>
 </launch>
  
