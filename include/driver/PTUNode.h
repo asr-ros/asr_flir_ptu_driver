@@ -93,7 +93,7 @@ class PTUNode {
         std::string service_path_prediction;
 
         // used for conversion between radian and degrees
-        static const double DEG_TO_RAD = M_PI / 180.0;
+        static constexpr double DEG_TO_RAD = M_PI / 180.0;
 };
 
 #endif // PTUNODE_H
